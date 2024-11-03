@@ -1,4 +1,4 @@
-const cardValues = ['A', 'A', 'B', 'B', 'C', 'C', 'D', 'D', 'E', 'E', 'F', 'F', 'G', 'G', 'H', 'H'];
+const cardValues = ['♥', '♥', '♦', '♦', '♠', '♠', '♣', '♣', '👻', '👻', '⭐', '⭐', '🔥', '🔥', '👍', '👍'];
 let cardGrid = document.getElementById('card-grid');
 let statusText = document.getElementById('status');
 let restartButton = document.getElementById('restartButton');
