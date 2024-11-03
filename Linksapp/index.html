@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        /* General Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #1A1A2E;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        #app {
+            width: 400px;
+            max-height: 600px;
+            background-color: #162447;
+            border-radius: 15px;
+            overflow: auto;
+            padding: 25px;
+            box-shadow: 0px 15px 25px rgba(0, 0, 0, 0.5);
+            color: #E8E8E8;
+            transition: all 0.3s ease;
+        }
+
+        #app:hover {
+            transform: translateY(-5px);
+            box-shadow: 0px 25px 35px rgba(0, 0, 0, 0.6);
+        }
+
+        h1 {
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #E8E8E8;
+        }
+
+        /* Input Fields */
+        input[type="text"] {
+            width: 100%;
+            margin-bottom: 15px;
+            padding: 10px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 8px;
+            background-color: #1F4068;
+            color: #E8E8E8;
+            transition: all 0.2s ease-in-out;
+        }
+
+        input[type="text"]::placeholder {
+            color: #888;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            box-shadow: 0px 0px 5px rgba(50, 150, 250, 0.4);
+        }
+
+        /* Add Button */
+        #addButton {
+            width: 100%;
+            background-color: #1B9CFC;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.3);
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        #addButton:hover {
+            background-color: #38A1DB;
+            box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Links */
+        .link {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            background-color: #1F4068;
+            padding: 12px;
+            border-radius: 10px;
+            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        a {
+            color: #FAD02E;
+            font-weight: bold;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        a:hover {
+            color: #FFDD57;
+        }
+
+        /* Buttons inside links */
+        .button-container button {
+            background-color: #E94560;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 5px;
+            font-size: 0.9rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .button-container button:hover {
+            background-color: #FF5C5C;
+        }
+    </style>
+</head>
+<body>
+  <div id="app">
+    <h1>Link Manager</h1>
+    <input id="labelInput" type="text" placeholder="Enter Link Label" />
+    <input id="urlInput" type="text" placeholder="Enter URL" />
+    <button id="addButton">Add Link</button>
+    <div id="linkList"></div>
+  </div>
+
+<script>
+    const labelInput = document.getElementById('labelInput');
+    const urlInput = document.getElementById('urlInput');
+    const addButton = document.getElementById('addButton');
+    const linkList = document.getElementById('linkList');
+
+    // Load saved links from local storage or set an empty array
+    let links = JSON.parse(localStorage.getItem('links')) || [];
+
+    // Render all links
+    const renderLinks = () => {
+        linkList.innerHTML = '';
+        links.forEach((link, index) => {
+            const linkDiv = document.createElement('div');
+            linkDiv.classList.add('link');
+
+            const linkAnchor = document.createElement('a');
+            linkAnchor.href = link.url;
+            linkAnchor.textContent = link.label;
+            linkAnchor.target = '_blank';
+
+            const buttonContainer = document.createElement('div');
+            buttonContainer.classList.add('button-container');
+
+            // Delete button
+            const deleteButton = document.createElement('button');
+            deleteButton.innerHTML = '🗑';
+            deleteButton.addEventListener('click', () => {
+                links.splice(index, 1);
+                localStorage.setItem('links', JSON.stringify(links));
+                renderLinks();
+            });
+
+            // Edit button
+            const editButton = document.createElement('button');
+            editButton.innerHTML = '✎';
+            editButton.addEventListener('click', () => {
+                labelInput.value = link.label;
+                urlInput.value = link.url;
+                links.splice(index, 1);
+            });
+
+            buttonContainer.appendChild(editButton);
+            buttonContainer.appendChild(deleteButton);
+            linkDiv.appendChild(linkAnchor);
+            linkDiv.appendChild(buttonContainer);
+            linkList.appendChild(linkDiv);
+        });
+    };
+
+    // Add link event
+    addButton.addEventListener('click', () => {
+        const label = labelInput.value.trim();
+        const url = urlInput.value.trim();
+        
+        if (!label) {
+            alert('Please enter a label');
+            return;
+        }
+        
+        if (!url) {
+            alert('Please enter a URL');
+            return;
+        }
+
+        links.push({ label, url });
+        localStorage.setItem('links', JSON.stringify(links));
+        renderLinks();
+
+        labelInput.value = '';
+        urlInput.value = '';
+    });
+
+    renderLinks();
+</script>
+
+</body>
+</html>

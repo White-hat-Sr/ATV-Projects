@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roasting Website</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>ROASTER😂MASTER</h1>
+    <p>Select your emotion and get roasted!</p>
+
+    <label for="emotion">Choose an emotion:</label>
+    <select id="emotion">
+        <option value="">Select an emotion</option>
+        <option value="breakup">Breakup</option>
+        <option value="friendship">Friendship issues</option>
+        <option value="failure">Failure</option>
+        <option value="work">Work stress</option>
+        <option value="love">Love troubles</option>
+        <option value="life">Life struggles</option>
+    </select>
+
+    <button onclick="generateRoast()">Roast Me!</button>
+
+    <div id="roast"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
